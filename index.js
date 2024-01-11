@@ -46,6 +46,22 @@ async function run() {
       const result = await alldata.insertOne(body);
       res.send(result);
     });
+    app.put("/increse/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {
+        _id: new ObjectId(id),
+      };
+      const updatedoc = {
+        $inc: {
+          views: +1,
+        },
+      };
+      const options = {
+        upsert: true,
+      };
+      const result = await alldata.updateOne(query, updatedoc, options);
+      res.send(result);
+    });
     app.get("/own-blog/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
@@ -90,7 +106,7 @@ async function run() {
       const options = {
         upsert: true,
       };
-      const result = alldata.updateOne(query, updatedoc, options);
+      const result = await alldata.updateOne(query, updatedoc, options);
       res.send(result);
     });
     app.put("/decline-blog/:id", async (req, res) => {
@@ -106,7 +122,7 @@ async function run() {
       const options = {
         upsert: true,
       };
-      const result = alldata.updateOne(query, updatedoc, options);
+      const result = await alldata.updateOne(query, updatedoc, options);
       res.send(result);
     });
   } finally {
